@@ -52,15 +52,17 @@ export async function getFolders() {
 
 export async function getFolder(id) {
   try {
-    const sql = `SELECT folders.name AS folder_name,
-    files.* 
-    FROM folders 
-    JOIN files ON files.folder_id = folders.id 
-    WHERE folders.id = $1`;
-    const { rows } = await db.query(sql, [id]); //* "rows" is an array containing the row selected
-    const selectedFolder = rows;
+    const sql = `
+    SELECT *, (
+      SELECT json_agg(files)
+      FROM files WHERE files.folder_id = folders.id
+    ) AS files
+    FROM folders
+    WHERE folders.id = $1;
+   `;
+    const selectedFolder = (await db.query(sql, [id])).rows;
 
-    return selectedFolder;
+    return selectedFolder[0];
   } catch (e) {
     console.error(e);
     return undefined;

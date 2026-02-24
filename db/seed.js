@@ -1,11 +1,11 @@
 import db from "#db/client";
 import { faker } from "@faker-js/faker";
-import { getFolders } from "./queries/files.js";
+import { getFolder } from "./queries/files.js";
 
 await db.connect();
 await seed();
 
-const folder = await getFolders();
+const folder = await getFolder(2);
 console.log("THIS IS THE FOLDER WITH ITS FILES", folder); //fix DELETE
 
 await db.end();
