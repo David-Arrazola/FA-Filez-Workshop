@@ -1,8 +1,13 @@
 import db from "#db/client";
 import { faker } from "@faker-js/faker";
+import { getFolders } from "./queries/files.js";
 
 await db.connect();
 await seed();
+
+const folders = await getFolders();
+console.log("THESE ARE THE FOLDERS", folders); //fix DELETE
+
 await db.end();
 console.log("🌱 Database seeded.");
 
