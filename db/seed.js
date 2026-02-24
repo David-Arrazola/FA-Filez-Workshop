@@ -1,11 +1,15 @@
 import db from "#db/client";
 import { faker } from "@faker-js/faker";
-import { getFolder } from "./queries/files.js";
+import { createFile } from "./queries/files.js";
 
 await db.connect();
 await seed();
 
-const folder = await getFolder(2);
+const folder = await createFile({
+  name: "ZooWeeMama.txt",
+  size: 500,
+  folderId: 2,
+});
 console.log("THIS IS THE FOLDER WITH ITS FILES", folder); //fix DELETE
 
 await db.end();
