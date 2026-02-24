@@ -5,8 +5,8 @@ import { getFolders } from "./queries/files.js";
 await db.connect();
 await seed();
 
-const folders = await getFolders();
-console.log("THESE ARE THE FOLDERS", folders); //fix DELETE
+const folder = await getFolders();
+console.log("THIS IS THE FOLDER WITH ITS FILES", folder); //fix DELETE
 
 await db.end();
 console.log("🌱 Database seeded.");

@@ -1,6 +1,5 @@
 import db from "#db/client";
 
-/** @returns the employee created according to the provided details */
 export async function createFile({ name, size, folderId }) {
   //!Making a new user means that we have to make a new ROW entry in DB "fullstack_employees"
   try {
@@ -18,8 +17,6 @@ export async function createFile({ name, size, folderId }) {
   }
 }
 
-/** @returns all files */
-//*fuction has been tested and works
 export async function getFiles() {
   try {
     const sql = `
@@ -35,13 +32,14 @@ export async function getFiles() {
   }
 }
 
-/** @returns all files */
-//*fuction has been tested and works
 export async function getFolders() {
   try {
     const sql = `
-    SELECT * FROM folders;
+    SELECT files.*, folders.name AS folder_name FROM files
+    JOIN folders ON files.folder_id = folders.id;
     `;
+    //! "folders.name AS folder_name" === the "name" COLUMN in folders TABLE is renamed to "folder_name"
+    //* This is to differentiate what "name"  refered to, since both tables have a COLUMN called "name"
     const { rows } = await db.query(sql); //*"rows" = array of all employee rows
     const folders = rows;
 
@@ -52,17 +50,17 @@ export async function getFolders() {
   }
 }
 
-/**
- * @returns the employee with the given id
- * @returns undefined if employee with the given id does not exist
- */
 export async function getFolder(id) {
   try {
-    const sql = `SELECT * FROM folders WHERE id = $1`;
+    const sql = `SELECT folders.name AS folder_name,
+    files.* 
+    FROM folders 
+    JOIN files ON files.folder_id = folders.id 
+    WHERE folders.id = $1`;
     const { rows } = await db.query(sql, [id]); //* "rows" is an array containing the row selected
     const selectedFolder = rows;
 
-    return selectedFolder[0];
+    return selectedFolder;
   } catch (e) {
     console.error(e);
     return undefined;
