@@ -4,14 +4,6 @@ import { createFile } from "./queries/files.js";
 
 await db.connect();
 await seed();
-
-const folder = await createFile({
-  name: "ZooWeeMama.txt",
-  size: 500,
-  folderId: 2,
-});
-console.log("THIS IS THE FOLDER WITH ITS FILES", folder); //fix DELETE
-
 await db.end();
 console.log("🌱 Database seeded.");
 
